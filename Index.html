@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Flipkart BBD Strategy Workshop - Non Large 2026</title>
+    <style>
+        :root {
+            --primary-purple: #2b1154;      /* Deep BBD Purple */
+            --purple-dark: #1a0836;         /* Dark Purple Accent */
+            --accent-yellow: #ffc20e;       /* Vibrant BBD Yellow */
+            --accent-gold: #e5a700;         /* Secondary Gold Tint */
+            --bg-cream: #fffdf5;            /* Soft Light Background */
+            --card-bg: #ffffff;
+            --text-dark: #1c0e33;
+            --text-muted: #5e5270;
+            --border: #e8e0f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-cream);
+            color: var(--text-dark);
+            padding: 12px;
+            line-height: 1.4;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(43, 17, 84, 0.12);
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-purple) 0%, var(--purple-dark) 100%);
+            color: white;
+            padding: 22px 20px;
+            border-radius: 10px 10px 0 0;
+            border-bottom: 4px solid var(--accent-yellow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .header-content {
+            flex: 1;
+        }
+
+        .header-logo {
+            height: 75px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+        }
+
+        header h1 {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            margin-bottom: 4px;
+            color: white;
+        }
+
+        header h1 span {
+            color: var(--accent-yellow);
+            font-style: italic;
+            text-transform: uppercase;
+        }
+
+        header p {
+            font-size: 13px;
+            color: #e3d9f2;
+            font-weight: 500;
+        }
+
+        /* Sub-bar for the secondary logo */
+        .sub-header-bar {
+            background: #f4effa;
+            border-bottom: 1px solid var(--border);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .sub-logo {
+            height: 32px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* Mobile-first Horizontal Scroll Tabs */
+        .nav-wrapper {
+            background: white;
+            border-bottom: 2px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .tabs {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px 12px;
+            gap: 8px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-btn {
+            background: #f4effa;
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--primary-purple);
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-purple);
+            color: var(--accent-yellow);
+            border-color: var(--primary-purple);
+            box-shadow: 0 2px 8px rgba(43, 17, 84, 0.25);
+        }
+
+        .search-container {
+            padding: 10px 12px;
+            background: white;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+            background-color: #f9f6fc;
+            color: var(--text-dark);
+        }
+
+        .search-box:focus {
+            border-color: var(--primary-purple);
+            background-color: #fff;
+        }
+
+        /* Content Area */
+        .content-area {
+            background: white;
+            padding: 16px;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .day-panel {
+            display: none;
+        }
+
+        .day-panel.active {
+            display: block;
+        }
+
+        .day-title {
+            font-size: 17px;
+            color: var(--primary-purple);
+            margin-bottom: 14px;
+            padding-bottom: 6px;
+            border-bottom: 3px solid var(--accent-yellow);
+            font-weight: 700;
+        }
+
+        /* Standard Table (Desktop View) */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th, td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: #f4effa;
+            color: var(--primary-purple);
+            font-weight: 800;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .badge-monologue { background: #f0e6ff; color: var(--primary-purple); border: 1px solid #d4beeb; }
+        .badge-interactive { background: #e2f7eb; color: #0e6b36; border: 1px solid #b3e6c6; }
+        .badge-break { background: #fff8d6; color: #806100; border: 1px solid #f2da79; }
+        .badge-social { background: #fae6ff; color: #700f8a; border: 1px solid #e2b3f0; }
+
+        .time-col {
+            font-weight: 700;
+            color: var(--primary-purple);
+            white-space: nowrap;
+        }
+
+        /* MOBILE RESPONSIVE CARDS */
+        @media (max-width: 768px) {
+            header {
+                padding: 16px 14px;
+            }
+
+            .header-logo {
+                height: 55px;
+            }
+
+            header h1 {
+                font-size: 18px;
+            }
+
+            header p {
+                font-size: 12px;
+            }
+
+            .sub-logo {
+                height: 26px;
+            }
+
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tr {
+                border: 1px solid var(--border);
+                border-left: 4px solid var(--primary-purple);
+                border-radius: 8px;
+                margin-bottom: 12px;
+                padding: 12px;
+                background: #fff;
+                box-shadow: 0 2px 4px rgba(43, 17, 84, 0.05);
+            }
+
+            td {
+                border: none;
+                padding: 2px 0;
+            }
+
+            .time-col {
+                font-size: 14px;
+                margin-bottom: 4px;
+                color: var(--primary-purple);
+            }
+
+            td:nth-child(2) {
+                font-weight: 700;
+                font-size: 15px;
+                color: var(--text-dark);
+            }
+
+            td:nth-child(3) {
+                font-size: 13px;
+                color: var(--text-muted);
+                margin: 4px 0;
+            }
+
+            td:nth-child(4) {
+                margin-top: 6px;
+            }
+
+            td:nth-child(5) {
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--primary-purple);
+                margin-top: 4px;
+            }
+
+            tr.break-row td:nth-child(5)::before {
+                content: "";
+            }
+
+            td:nth-child(5)::before {
+                content: "👤 Facilitator: ";
+                color: var(--text-muted);
+                font-weight: 400;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="header-content">
+            <h1>BBD Strategy Workshop 2026 <span>Non Large</span></h1>
+            <p>📍 17th–19th August 2026 | Aldovia Resort & Convention, Bengaluru</p>
+        </div>
+        <!-- Main Workshop Badge Logo -->
+        <img src="87B229CE-A271-4900-97EE-BF39230ED230.png" alt="BBD Strategy Workshop Logo" class="header-logo">
+    </header>
+
+    <div class="sub-header-bar">
+        <!-- 1NL Motto Logo -->
+        <img src="unnamed.png" alt="1NL - 1 For All All For 1" class="sub-logo">
+    </div>
+
+    <div class="nav-wrapper">
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="day1" onclick="selectTab(this, 'day1')">Day 1 (17 Aug)</button>
+            <button class="tab-btn" data-tab="day2" onclick="selectTab(this, 'day2')">Day 2 (18 Aug)</button>
+            <button class="tab-btn" data-tab="day3" onclick="selectTab(this, 'day3')">Day 3 (19 Aug)</button>
+            <button class="tab-btn" data-tab="all" onclick="selectTab(this, 'all')">Show All Days</button>
+        </div>
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-box" placeholder="🔍 Search session or speaker..." onkeyup="filterAgenda()">
+        </div>
+    </div>
+
+    <div class="content-area">
+
+        <!-- DAY 1 PANEL -->
+        <div id="day1" class="day-panel active">
+            <h2 class="day-title">Day 1: 17th August 2026</h2>
+            <table>
+                <thead>
+                    <tr><th>Time</th><th>Segment</th><th>Particulars / Details</th><th>Type</th><th>Facilitator</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="time-col">11:30 - 11:35</td><td>Welcome Non Large Team</td><td>Welcome</td><td><span class="badge badge-monologue">Monologue</span></td><td>Ashwathy</td></tr>
+                    <tr><td class="time-col">11:35 - 11:50</td><td>Leadership Address</td><td>Expectations for BBD</td><td><span class="badge badge-monologue">Monologue</span></td><td>Bapuji</td></tr>
+                    <tr><td class="time-col">11:50 - 13:50</td><td>Central Team Presentation</td><td>H1 Performance Learning from BBD 2025 <br> New construct (3 Slides each leader)</td><td><span class="badge badge-interactive">Interactive</span></td><td>Abhilash B, Abhinav D, Indranil, Sandeep K, Sandeep, Ramesh</td></tr>
+                    <tr class="break-row" style="background:#fffdf0"><td class="time-col">13:50 - 14:35</td><td>Lunch 🍱</td><td>Lunch Break</td><td><span class="badge badge-break">Break</span></td><td>-</td></tr>
+                    <tr><td class="time-col">14:35 - 17:35</td><td>Team Handshake & Support Required</td><td>Inter departmental Discussion Design + Planning + LH</td><td><span class="badge badge-interactive">Interactive</span></td><td>-</td></tr>
+                    <tr class="break-row" style="background:#fffdf0"><td class="time-col">17:35 - 17:50</td><td>Tea Break ☕</td><td>Tea Break</td><td><span class="badge badge-break">Break</span></td><td>-</td></tr>
+                    <tr><td class="time-col">17:50 - 19:35</td><td>PPT Working Sessions Post Handshake</td><td>Discussion</td><td><span class="badge badge-interactive">Interactive</span></td><td>-</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- DAY 2 PANEL -->
+        <div id="day2" class="day-panel">
+            <h2 class="day-title">Day 2: 18th August 2026</h2>
+            <table>
+                <thead>
+                    <tr><th>Time</th><th>Segment</th><th>Particulars / Details</th><th>Type</th><th>Facilitator</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="time-col">10:00 - 10:05</td><td>Welcome Day 2</td><td>Recap from Day 1</td><td><span class="badge badge-monologue">Monologue</span></td><td>Abhilash</td></tr>
+                    <tr><td class="time-col">10:05 - 10:35</td><td>Leadership Address</td><td>Expectations for BBD</td><td><span class="badge badge-monologue">Monologue</span></td><td>Renuka</td></tr>
+                    <tr><td class="time-col">10:35 - 11:35</td><td>North Zone Review</td><td>H1 Review, Ekart Projects, GM Wise BBD Readiness</td><td><span class="badge badge-interactive">Interactive</span></td><td>Jitender & Team</td></tr>
+                    <tr class="break-row" style="background:#fffdf0"><td class="time-col">11:35 - 11:50</td><td>Tea Break ☕</td><td>Tea Break</td><td><span class="badge badge-break">Break</span></td><td>-</td></tr>
+                    <tr><td class="time-col">11:50 - 12:50</td><td>North Zone Review (Cont.)</td><td>H1 Review, Ekart Projects, GM Wise BBD Readiness</td><td><span class="badge badge-interactive">Interactive</span></td><td>Jitender & Team</td></tr>
+                    <tr class="break-row" style="background:#fffdf0"><td class="time-col">12:50 - 13:35</td><td>Lunch 🍱</td><td>Lunch Break</td><td><span class="badge badge-break">Break</span></td><td>-</td></tr>
+                    <tr><td class="time-col">13:35 - 14:35</td><td>East Zone Review</td><td>H1 Review, Ekart Projects, GM Wise BBD Readiness</td><td><span class="badge badge-interactive">Interactive</span></td><td>Wamiq & Team</td></tr>
+                    <tr class="break-row" style="background:#fffdf0"><td class="time-col">14:35 - 14:50</td><td>Tea Break ☕</td><td>Tea Break</td><td><span class="badge badge-break">Break</span></td><td>-</td></tr>
+                    <tr><td class="time-col">14:50 - 15:50</td><td>East Zone Review (Cont.)</td><td>H1 Review, Ekart Projects, GM Wise BBD Readiness</td><td><span class="badge badge-interactive">Interactive</span></td><td>Wamiq & Team</td></tr>
+                    <tr><td class="time-col">15:50 - 16:05</td><td>Leadership Address</td><td>Leadership Connect</td><td><span class="badge badge-interactive">Interactive</span></td><td>Hemant Badri</td></tr>
+                    <tr style="background:#fae6ff"><td class="time-col">Evening / TBD</td><td>Cocktail Dinner 🍸🎉</td><td>Social Event</td><td><span class="badge badge-social">Social Event</span></td><td>All Attendees</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- DAY 3 PANEL -->
+        <div id="day3" class="day-panel">
+            <h2 class="day-title">Day 3: 19th August 2026</h2>
+            <table>
+                <thead>
+                    <tr><th>Time</th><th>Segment</th><th>Particulars / Details</th><th>Type</th><th>Facilitator</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="time-col">10:00 - 10:05</td><td>Welcome</td><td>Recap from Day 2</td><td><span class="badge badge-monologue">Monologue</span></td><td>Abhilash</td></tr>
+                    <tr><td class="time-col">10:05 - 11:05</td><td>AI Automation & West Zone Review</td><td>Zonal presentation on AI Automation (15 Mins Each) / H1 Review, Ekart Projects, GM Wise BBD Readiness</td><td><span class="badge badge-interactive">Interactive</span></td><td>Respective Zones / Sachin & Team</td></tr>
+                    <tr class="break-row" style="background:#fffdf0"><td class="time-col">11:05 - 11:20</td><td>Tea Break ☕</td><td>Tea Break</td><td><span class="badge badge-break">Break</span></td><td>-</td></tr>
+                    <tr><td class="time-col">11:20 - 12:20</td><td>West Zone Review (Cont.)</td><td>H1 Review, Ekart Projects, GM Wise BBD Readiness</td><td><span class="badge badge-interactive">Interactive</span></td><td>Sachin & Team</td></tr>
+                    <tr class="break-row" style="background:#fffdf0"><td class="time-col">12:20 - 13:05</td><td>Lunch 🍱</td><td>Lunch Break</td><td><span class="badge badge-break">Break</span></td><td>-</td></tr>
+                    <tr><td class="time-col">13:05 - 14:05</td><td>South Zone Review</td><td>H1 Review, Ekart Projects, GM Wise BBD Readiness</td><td><span class="badge badge-interactive">Interactive</span></td><td>-</td></tr>
+                    <tr class="break-row" style="background:#fffdf0"><td class="time-col">14:05 - 14:20</td><td>Tea Break ☕</td><td>Tea Break</td><td><span class="badge badge-break">Break</span></td><td>-</td></tr>
+                    <tr><td class="time-col">14:20 - 15:20</td><td>South Zone Review (Cont.)</td><td>H1 Review, Ekart Projects, GM Wise BBD Readiness</td><td><span class="badge badge-interactive">Interactive</span></td><td>-</td></tr>
+                    <tr><td class="time-col">15:20 - 15:35</td><td>Vote of Thanks</td><td>All the Best & Closing</td><td><span class="badge badge-monologue">Monologue</span></td><td>Bapuji / Ashwathy</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function selectTab(button, tabId) {
+        var buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(function(btn) {
+            btn.classList.remove('active');
+        });
+
+        var panels = document.querySelectorAll('.day-panel');
+        panels.forEach(function(panel) {
+            panel.classList.remove('active');
+        });
+
+        button.classList.add('active');
+
+        if (tabId === 'all') {
+            panels.forEach(function(panel) {
+                panel.classList.add('active');
+            });
+        } else {
+            document.getElementById(tabId).classList.add('active');
+        }
+    }
+
+    function filterAgenda() {
+        var input = document.getElementById('searchInput').value.toLowerCase();
+        var rows = document.querySelectorAll('tbody tr');
+
+        rows.forEach(function(row) {
+            var text = row.innerText.toLowerCase();
+            if (text.indexOf(input) > -1) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
